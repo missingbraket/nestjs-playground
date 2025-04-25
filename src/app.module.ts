@@ -4,19 +4,27 @@ import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './res/user/user.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 // NestJS + TypeORM + MySQL 연결 설정
 @Module({
   imports: [
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }), //.env(환경변수) 사용하기 위함
+
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({ //type, host etc를 TypeOrm에 넘겨주란 뜻
-        retryAttempts: 10,
+      // useFactory: () => ({ //type, host etc를 TypeOrm에 넘겨주란 뜻
+      useFactory: (configService: ConfigService) => ({
+        //host: 'localhost' -> host: configService.get('DB_HOST')로 변경
+        retryAttempts: configService.get('NODE_ENV') === 'prod' ? 10 : 1,
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        database: 'study',
-        username: 'root',
-        password: '',
+        host: configService.get('DB_HOST'),
+        port: Number(configService.get('DB_PORT')), //3306,
+        database: configService.get('DB_NAME'), //'study423',
+        username: configService.get('DB_USER'), //'root',
+        password: configService.get('DB_PASSWORD'), //'',
         entities: [
           path.join(__dirname, '/entities/**/*.entity/{js, ts}'),
         ],
