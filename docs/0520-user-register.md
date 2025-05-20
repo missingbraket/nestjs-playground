@@ -1,6 +1,5 @@
 # 0520
 
-https://suloth.tistory.com/75?category=1096080
 
 <aside>
 💡
@@ -90,6 +89,5 @@ imports: [TypeOrmModule.forFeature([UserEntity])]
 
 ⇒ forFeature() : UserService가 UserRepository(엔터티)를 쓸 수 있게 해줌
 
-     👉  “아~ 이 모듈에서 UserEntity에 대한 Repository 필요하구나?”
-
+👉  “아~ 이 모듈에서 UserEntity에 대한 Repository 필요하구나?”
 👉 그리고 그 Repository를 서비스에서 @InjectRepository()로 주입 가능하게 만들어줌!
