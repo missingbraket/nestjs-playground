@@ -3,7 +3,8 @@ import * as path from 'path';
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv'; //.env사용 위해 추가 (configModule사용이 불가하기때문)
 
-dotenv.config();
+// dotenv.config();
+dotenv.config({ path: `.env.dev` });
 
 // export const dataSource = new DataSource({
 //     type: 'mysql', //어떤 DB 사용할건지

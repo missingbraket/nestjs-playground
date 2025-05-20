@@ -6,15 +6,19 @@ import { AppService } from './app.service';
 import { UserModule } from './res/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+console.log(`.env.${process.env.NODE_ENV}`); //cross-env위해 추가
+
 // NestJS + TypeORM + MySQL 연결 설정
 @Module({
   imports: [
 
     ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}`, //cross-env위해 추가
       isGlobal: true,
     }), //.env(환경변수) 사용하기 위함
 
     TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
       // useFactory: () => ({ //type, host etc를 TypeOrm에 넘겨주란 뜻
       useFactory: (configService: ConfigService) => ({
         //host: 'localhost' -> host: configService.get('DB_HOST')로 변경
@@ -26,7 +30,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get('DB_USER'), //'root',
         password: configService.get('DB_PASSWORD'), //'',
         entities: [
-          path.join(__dirname, '/entities/**/*.entity/{js, ts}'),
+          path.join(__dirname, '/entities/**/*.entity.{js,ts}'),
         ],
         synchronize: false,
         logging: true,
